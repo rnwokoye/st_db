@@ -51,7 +51,9 @@ sscdb = st.secrets.connections
 connect_args = {}
 
 if "DB_ROOT_CERT" in st.secrets:
-    connect_args = {"cafile": st.secrets.DB_ROOT_CERT, "validate_host": False}
+    with "temp_file"(suffix=".pem", delete=False) as tempfile:
+        tempfile.write(st.secrets.DB_ROOT_CERT.encode("utf-8"))
+        connect_args = {"cafile": st.tempfile.name, "validate_host": False}
 
 
 def get_conn():
