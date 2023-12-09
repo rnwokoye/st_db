@@ -46,7 +46,7 @@ st.title("Hello Streamlit")
 # In order to add ssl certs, trying using the toml path:
 
 
-sscdb = st.secrets.connections.database
+sscdb = st.secrets.connections
 
 connect_args = {}
 
