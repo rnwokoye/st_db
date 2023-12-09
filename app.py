@@ -12,12 +12,10 @@ st.title("Hello Streamlit")
 # my tests
 # db_connect = st.secrets.connections.cockroachdb.DATABASE_URL
 # conn = st.connection("cockroachdb", type="sql", url=db_connect)
-# conn = psycopg2.connect(
-#     "postgresql://stkt_user:AQFKR75HQWNJ0nmHLX9ciA@violet-opossum-12877.7tt.cockroachlabs.cloud:26257/streamlit_tkt_app?sslmode=verify-full"
-# )
 conn = psycopg2.connect(
-    "postgresql://stkt_user:AQFKR75HQWNJ0nmHLX9ciA@violet-opossum-12877.7tt.cockroachlabs.cloud:26257/streamlit_tkt_app?sslmode=disable"
+    "postgresql://stkt_user:AQFKR75HQWNJ0nmHLX9ciA@violet-opossum-12877.7tt.cockroachlabs.cloud:26257/streamlit_tkt_app?sslmode=verify-full"
 )
+
 
 # streamlit_tkt_app
 # db_connect = st.secrets.connections.cockroachdb.DATABASE_URL
