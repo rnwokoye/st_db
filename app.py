@@ -17,7 +17,7 @@ st.title("Hello Streamlit")
 # )
 
 conn = psycopg2.connect(
-    "postgresql://stkt_user:AQFKR75HQWNJ0nmHLX9ciA@violet-opossum-12877.7tt.cockroachlabs.cloud:26257/streamlit_tkt_app?sslmode=require&sslrootcert=system"
+    "postgresql://stkt_user:AQFKR75HQWNJ0nmHLX9ciA@violet-opossum-12877.7tt.cockroachlabs.cloud:26257/streamlit_tkt_app?sslmode=verify-full&sslrootcert=system"
 )
 
 
