@@ -1,94 +1,44 @@
-# streamlit_app.py
+# This portion works on local.
 
 import streamlit as st
 import psycopg2
 import pandas as pd
+import tempfile
+import boto3
 
-# Initialize connection.
-# Original exconn = st.connection("postgresql", type="sql")
 
 st.title("Hello Streamlit")
 
-# my tests
-# db_connect = st.secrets.connections.cockroachdb.DATABASE_URL
-# conn = st.connection("cockroachdb", type="sql", url=db_connect)
-# conn = psycopg2.connect(
-#     "postgresql://stkt_user:AQFKR75HQWNJ0nmHLX9ciA@violet-opossum-12877.7tt.cockroachlabs.cloud:26257/streamlit_tkt_app?sslmode=verify-full"
-# )
 
-# conn = psycopg2.connect(
-#     "postgresql://stkt_user:AQFKR75HQWNJ0nmHLX9ciA@violet-opossum-12877.7tt.cockroachlabs.cloud:26257/streamlit_tkt_app?sslmode=verify-full&sslrootcert=system"
-# )
+def download_to_temp_file(bucket_name, s3_file_key):
+    s3 = boto3.client("s3")
+    temp_file = tempfile.NamedTemporaryFile(delete=False)
 
+    s3.download_fileobj(bucket_name, s3_file_key, temp_file)
+    temp_file.close()  # Close the file so it can be reopened later by other processes
 
-# # streamlit_tkt_app
-# # db_connect = st.secrets.connections.cockroachdb.DATABASE_URL
-
-# query = "select * from mytable;"
-# with conn.cursor() as cur:
-#     cur.execute(query)
-#     res = cur.fetchall()
-#     data = pd.DataFrame(res)
-
-# st.write(data)
+    return temp_file.name
 
 
-# end of my tests
+conn9 = psycopg2.connect(
+    dbname=st.secrets.dbname,
+    user=st.secrets.user,
+    password=st.secrets.password,
+    host=st.secrets.host,
+    sslmode="require",
+    port=st.secrets.port,
+    sslrootcert=download_to_temp_file(
+        st.secrets.CA_CERT.bucket, st.secrets.CA_CERT.file
+    ),  # Use the temp file path
+)
 
-# Perform query.
-# df = conn.query("SELECT * FROM mytable;", ttl="10m")
+q9 = "SELECT * FROM traffic_tickets;"
 
-# # Print results.
-# for row in df.itertuples():
-#     st.write(f"{row.name} has a :{row.pet}:")
+with conn9.cursor() as cur:
+    cur.execute(q9)
+    res9 = cur.fetchall()
+    data9 = pd.DataFrame(res9)
 
+st.write(data9)
 
-# In order to add ssl certs, trying using the toml path:
-
-
-sscdb = st.secrets.connections
-
-connect_args = {}
-
-if "DB_ROOT_CERT" in st.secrets:
-    with "temp_file"(suffix=".pem", delete=False) as tempfile:
-        tempfile.write(st.secrets.DB_ROOT_CERT.encode("utf-8"))
-        connect_args = {"cafile": st.tempfile.name, "validate_host": False}
-
-
-def get_conn():
-    conn = psycopg2.connect(
-        dbname=sscdb["dbname"],
-        host=sscdb["host"],
-        user=sscdb["user"],
-        port=sscdb["port"],
-        sslmode=sscdb["sslmode"],
-        **connect_args
-    )
-
-    return conn
-
-
-def main():
-    conn = get_conn()
-    with conn.cursor() as cur:
-        cur.execute("select * from mytable;")
-        res = cur.fetchall()
-        data = pd.DataFrame(res)
-
-    print(data)
-
-
-if __name__ == "__main__":
-    main()
-
-# [connections.database]
-# host = "violet-opossum-12877.7tt.cockroachlabs.cloud"
-# port = '26257'
-# dbname = 'streamlit_tkt_app'
-# user = "stkt_user"
-# password = "AQFKR75HQWNJ0nmHLX9c"
-# sslmode = "verify-full"
-# # sslcert = /path/to/client.crt
-# # sslkey = /path/to/client.key
-# sslrootcert = '/Users/richardnwokoye/.postgresql/root.crt '
+conn9.close()
