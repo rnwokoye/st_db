@@ -20,6 +20,11 @@ def download_to_temp_file(bucket_name, s3_file_key):
     return temp_file.name
 
 
+temp_cert_file_path3 = download_to_temp_file(
+    st.secrets.CA_CERT.bucket, st.secrets.CA_CERT.file
+)
+
+
 conn9 = psycopg2.connect(
     dbname=st.secrets.dbname,
     user=st.secrets.user,
@@ -27,9 +32,7 @@ conn9 = psycopg2.connect(
     host=st.secrets.host,
     sslmode="require",
     port=st.secrets.port,
-    sslrootcert=download_to_temp_file(
-        st.secrets.CA_CERT.bucket, st.secrets.CA_CERT.file
-    ),  # Use the temp file path
+    sslrootcert=download_to_temp_file(temp_cert_file_path3),  # Use the temp file path
 )
 
 q9 = "SELECT * FROM traffic_tickets;"
