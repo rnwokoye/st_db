@@ -24,6 +24,8 @@ temp_cert_file_path3 = download_to_temp_file(
     st.secrets.CA_CERT.bucket, st.secrets.CA_CERT.file
 )
 
+st.write(temp_cert_file_path3)
+
 
 conn9 = psycopg2.connect(
     dbname=st.secrets.dbname,
