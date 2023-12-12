@@ -5,6 +5,7 @@ import psycopg2
 import pandas as pd
 import tempfile
 import boto3
+import os
 
 
 st.title("Hello Streamlit")
@@ -26,15 +27,14 @@ temp_cert_file_path3 = download_to_temp_file(
 
 st.write(temp_cert_file_path3)
 
-
 conn9 = psycopg2.connect(
-    dbname=st.secrets.dbname,
-    user=st.secrets.user,
-    password=st.secrets.password,
-    host=st.secrets.host,
+    dbname=st.secrets.connections.dbname,
+    user=st.secrets.connections.user,
+    password=st.secrets.connections.password,
+    host=st.secrets.connections.host,
     sslmode="require",
-    port=st.secrets.port,
-    sslrootcert=download_to_temp_file(temp_cert_file_path3),  # Use the temp file path
+    port=st.secrets.connections.port,
+    sslrootcert=temp_cert_file_path3,  # Use the temp file path
 )
 
 q9 = "SELECT * FROM traffic_tickets;"
@@ -45,5 +45,7 @@ with conn9.cursor() as cur:
     data9 = pd.DataFrame(res9)
 
 st.write(data9)
+
+os.remove(temp_cert_file_path3)
 
 conn9.close()
