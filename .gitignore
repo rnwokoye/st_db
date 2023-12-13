@@ -30,3 +30,4 @@ tests.py
 todo_list.py
 app_login.yaml
 actions.py
+secrets.toml

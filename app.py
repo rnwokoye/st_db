@@ -1,10 +1,13 @@
 # This portion works on local.
 
-import boto3
+# import boto3
+import subprocess
 
 import psycopg2
-import pandas as pd
+
+# import pandas as pd
 import streamlit as st
+import pandas as pd
 import tempfile
 import os
 
