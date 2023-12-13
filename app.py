@@ -68,4 +68,4 @@ df = conn.query("SELECT now();")
 
 # Print results.
 for row in df.itertuples():
-    st.(row)
+    st.write(row)
