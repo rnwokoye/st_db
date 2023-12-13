@@ -63,8 +63,9 @@ st.subheader("Test Boto3")
 conn = st.connection("postgresql", type="sql")
 
 # Perform query.
-df = conn.query("SELECT * FROM public.mytable;", ttl="10m")
+# df = conn.query("SELECT * FROM public.mytable;", ttl="10m")
+df = conn.query("SELECT now();")
 
 # Print results.
 for row in df.itertuples():
-    st.write(f"{row.name} has a :{row.pet}:")
+    st.(row)
