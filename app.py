@@ -63,8 +63,7 @@ st.subheader("Test Boto3")
 conn = st.connection("cockroachdb", type="sql")
 
 # Perform query.
-df = conn.query("SELECT * FROM public.mytable;", ttl="10m")
+df = conn.query("SELECT * FROM public.traffic_tickets;", ttl="10m")
 
 # Print results.
-for row in df.itertuples():
-    st.write(f"{row.name} has a :{row.pet}:")
+st.write(df)
